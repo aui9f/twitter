@@ -12,9 +12,14 @@ import {
   SocialSignIn,
   TextBtn,
 } from "@/assets/styled/UserStyle";
+import { useState } from "react";
 
 function Login() {
-  const { register } = useForm();
+  const {
+    register,
+    formState: { isValid },
+    watch,
+  } = useForm();
   const navi = useNavigate();
 
   const onPageMove = () => {
@@ -28,13 +33,16 @@ function Login() {
 
         <Form>
           <Title>LOGIN..</Title>
-          <Input {...register("email")} placeholder="email" />
+          <Input
+            {...register("email", { required: "필수입력사항입니다." })}
+            placeholder="email"
+          />
           <Input
             type="password"
-            {...register("pssword")}
+            {...register("password", { required: "필수입력사항입니다." })}
             placeholder="password"
           />
-          <Button>Login</Button>
+          <Button disabled={!isValid}>Login</Button>
           <Err>
             <p></p>
           </Err>
@@ -67,6 +75,7 @@ function Login() {
             회원가입
           </button>
         </TextBtn>
+        <p></p>
       </div>
     </Wrapper>
   );

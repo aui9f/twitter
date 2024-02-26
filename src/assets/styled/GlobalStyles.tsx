@@ -53,6 +53,12 @@ input, button{
 }
 button{
   cursor: pointer;
+  &:disabled {
+    background-color: #cccccc;
+    border: 1px solid #cccccc;
+    color: gray;
+    font-style: italic;
+  }
 }
 
 
