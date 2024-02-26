@@ -53,6 +53,7 @@ describe("회원가입테스트", () => {
     const button = screen.getByText("OK");
     expect(button).toBeDisabled();
   });
+  
   test("모든 정보를 입력할 경우, 버튼 활성화", async () => {
     const email = screen.getByPlaceholderText("Email");
     const pw = screen.getByPlaceholderText("pw");

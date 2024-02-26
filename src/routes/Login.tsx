@@ -12,26 +12,49 @@ import {
   SocialSignIn,
   TextBtn,
 } from "@/assets/styled/UserStyle";
-import { useState } from "react";
+// import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, signInWithEmailAndPassword } from "@/fbase";
+
+interface ILoginForm {
+  email: string
+  password: string
+  extraError?: string
+}
 
 function Login() {
+  const navigator = useNavigate();
   const {
     register,
-    formState: { isValid },
-    watch,
-  } = useForm();
+    formState: {errors, isValid },
+    handleSubmit,
+    setError,
+    
+  } = useForm<ILoginForm>();
   const navi = useNavigate();
 
   const onPageMove = () => {
     navi("/signup");
   };
 
+  const onVaild = ({email, password}: ILoginForm) => {
+    signInWithEmailAndPassword(auth, email, password).then(userCredential=>{
+      const user = userCredential.user;
+      console.log(user)
+      navigator('/')
+    }).catch(error=>{
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+      setError("extraError", { message: "아이디/비밀번호를 확인해주십시오." });
+    })
+  }
+
   return (
     <Wrapper>
       <div>
         <Logo src="" />
 
-        <Form>
+        <Form onSubmit={handleSubmit(onVaild)}>
           <Title>LOGIN..</Title>
           <Input
             {...register("email", { required: "필수입력사항입니다." })}
@@ -44,7 +67,7 @@ function Login() {
           />
           <Button disabled={!isValid}>Login</Button>
           <Err>
-            <p></p>
+            <p>{errors?.extraError?.message}</p>
           </Err>
           <Divider>
             <div></div>
